@@ -17,11 +17,18 @@ function StaffPage() {
   const [verticals, setVerticals] = useState<Vertical[]>([])
   const [loading, setLoading] = useState(true)
   const [showAdd, setShowAdd] = useState(false)
+  const [editing, setEditing] = useState<StaffUser | null>(null)
   const [saving, setSaving] = useState(false)
 
-  const [form, setForm] = useState({
-    name: '', email: '', password: '', role: 'manager' as StaffRole, assignedVerticals: [] as string[],
-  })
+  const emptyForm = { name: '', email: '', password: '', role: 'manager' as StaffRole, assignedVerticals: [] as string[] }
+  const [form, setForm] = useState(emptyForm)
+
+  const openAdd = () => { setEditing(null); setForm(emptyForm); setShowAdd(true) }
+  const openEdit = (s: StaffUser) => {
+    setEditing(s)
+    setForm({ name: s.name, email: s.email, password: '', role: s.role, assignedVerticals: s.assignedVerticals })
+    setShowAdd(true)
+  }
 
   const load = async () => {
     setLoading(true)
@@ -50,17 +57,25 @@ function StaffPage() {
     }))
   }
 
-  const handleCreate = async (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
     setSaving(true)
     try {
-      await authedJson('/api/staff', { method: 'POST', body: JSON.stringify(form) })
-      toast.success('Staff account created')
+      if (editing) {
+        await authedJson(`/api/staff/${editing.uid}`, {
+          method: 'PATCH',
+          body: JSON.stringify({ name: form.name, role: form.role, assignedVerticals: form.role === 'manager' ? form.assignedVerticals : [] }),
+        })
+        toast.success('Staff account updated')
+      } else {
+        await authedJson('/api/staff', { method: 'POST', body: JSON.stringify(form) })
+        toast.success('Staff account created')
+      }
       setShowAdd(false)
-      setForm({ name: '', email: '', password: '', role: 'manager', assignedVerticals: [] })
+      setForm(emptyForm)
       load()
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Failed to create staff account')
+      toast.error(err instanceof Error ? err.message : 'Failed to save staff account')
     } finally {
       setSaving(false)
     }
@@ -93,7 +108,7 @@ function StaffPage() {
           <h1 className="text-lg font-bold">Staff Accounts</h1>
           <p className="text-[12px] text-muted">Manage who can access the admin panel and what they can see</p>
         </div>
-        <Btn variant="gold" onClick={() => setShowAdd(true)}>+ Add Staff</Btn>
+        <Btn variant="gold" onClick={openAdd}>+ Add Staff</Btn>
       </div>
 
       <Card noPad>
@@ -126,6 +141,7 @@ function StaffPage() {
                   <Td align="right" shrink>
                     {s.uid !== me.uid ? (
                       <div className="flex justify-end gap-1">
+                        <IconBtn icon="✏️" label="Edit staff account" onClick={() => openEdit(s)} />
                         <IconBtn icon={s.active ? '⏸' : '▶'} label={s.active ? 'Disable account' : 'Enable account'} onClick={() => toggleActive(s)} />
                         <IconBtn icon="🗑" label="Remove account" variant="red" onClick={() => removeStaff(s)} />
                       </div>
@@ -140,23 +156,26 @@ function StaffPage() {
         )}
       </Card>
 
-      <Modal open={showAdd} onClose={() => setShowAdd(false)} title="Add Staff Account"
+      <Modal open={showAdd} onClose={() => setShowAdd(false)} title={editing ? 'Edit Staff Account' : 'Add Staff Account'}
         footer={<>
           <Btn variant="outline" onClick={() => setShowAdd(false)}>Cancel</Btn>
-          <Btn variant="gold" disabled={saving} onClick={handleCreate as unknown as () => void}>
-            {saving ? 'Creating…' : 'Create Account'}
+          <Btn variant="gold" disabled={saving} onClick={handleSave as unknown as () => void}>
+            {saving ? 'Saving…' : editing ? 'Save Changes' : 'Create Account'}
           </Btn>
         </>}>
-        <form onSubmit={handleCreate}>
+        <form onSubmit={handleSave}>
           <Field label="Full Name">
             <Input required value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
           </Field>
           <Field label="Email">
-            <Input type="email" required value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
+            <Input type="email" required disabled={!!editing} value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
           </Field>
-          <Field label="Temporary Password">
-            <Input type="text" required minLength={6} value={form.password} onChange={e => setForm(f => ({ ...f, password: e.target.value }))} />
-          </Field>
+          {editing && <p className="text-[11px] text-muted -mt-2 mb-3.5">Email can&apos;t be changed here — remove and re-add the account to use a different email.</p>}
+          {!editing && (
+            <Field label="Temporary Password">
+              <Input type="text" required minLength={6} value={form.password} onChange={e => setForm(f => ({ ...f, password: e.target.value }))} />
+            </Field>
+          )}
           <Field label="Role">
             <Select value={form.role} onChange={e => setForm(f => ({ ...f, role: e.target.value as StaffRole }))}>
               <option value="manager">Manager (scoped to specific verticals)</option>
