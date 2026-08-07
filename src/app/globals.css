@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Public site palette (ported from the legacy index.html) */
+  --gold:    #c9a84c;
+  --gold2:   #e8cc7a;
+  --cream:   #f5efe6;
+  --cream2:  #fdf8f2;
+  --maroon:  #1a2d5a;
+  --maroon2: #223672;
+  --text:    #2a2420;
+  --muted:   #8a7d72;
+  --border:  #e0d5c8;
+
+  /* Admin panel palette (ported from the legacy admin.html) */
+  --sb:      #131110;
+  --sb2:     #1e1a18;
+  --bg:      #f2eeea;
+  --card:    #fff;
+  --green:   #16a34a;
+  --red:     #dc2626;
+  --blue:    #2563eb;
+  --amber:   #d97706;
+  --purple:  #7c3aed;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: #fff;
+  color: var(--text);
+  font-family: var(--font-jost), sans-serif;
+  overflow-x: hidden;
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* Thin, unobtrusive scrollbars for admin panel scroll areas (sidebar, modals, tables). */
+.thin-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+.thin-scroll::-webkit-scrollbar { width: 5px; height: 5px; }
+.thin-scroll::-webkit-scrollbar-track { background: transparent; }
+.thin-scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 4px; }
+.thin-scroll::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.28); }
+
+.thin-scroll-light { scrollbar-color: rgba(0, 0, 0, 0.15) transparent; }
+.thin-scroll-light::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.12); }
+.thin-scroll-light::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.22); }
