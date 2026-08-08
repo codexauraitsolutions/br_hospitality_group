@@ -8,7 +8,17 @@ export const revalidate = 60
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const vertical = await getVerticalBySlug(params.slug)
   if (!vertical) return {}
-  return { title: `${vertical.name} — BR Hospitality Group`, description: vertical.tagline }
+  const description = vertical.tagline || `${vertical.category} in ${vertical.location}`
+  return {
+    title: vertical.name,
+    description,
+    alternates: { canonical: `/venues/${vertical.slug}` },
+    openGraph: {
+      title: vertical.name,
+      description,
+      images: vertical.coverImageUrl ? [{ url: vertical.coverImageUrl }] : undefined,
+    },
+  }
 }
 
 export default async function VerticalDetailPage({ params }: { params: { slug: string } }) {

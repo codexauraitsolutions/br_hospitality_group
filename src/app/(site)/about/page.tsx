@@ -1,9 +1,15 @@
+import type { Metadata } from 'next'
 import { getSiteSettings, getTeamMembers } from '@/lib/firestore'
 import IconCardGrid from '@/components/sections/IconCardGrid'
 import StatsBand from '@/components/sections/StatsBand'
 import Link from 'next/link'
 
 export const revalidate = 60
+export const metadata: Metadata = {
+  title: 'About Us',
+  description: 'Learn about BR Hospitality Group — 15+ years running premium restaurants, convention centres, resorts, farm stays and catering across Hyderabad.',
+  alternates: { canonical: '/about' },
+}
 
 export default async function AboutPage() {
   const [settings, team] = await Promise.all([getSiteSettings(), getTeamMembers()])

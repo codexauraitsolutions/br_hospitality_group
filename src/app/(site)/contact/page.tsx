@@ -1,8 +1,14 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { getSiteSettings, getVerticals } from '@/lib/firestore'
 import ContactForm from '@/components/sections/ContactForm'
 
 export const revalidate = 60
+export const metadata: Metadata = {
+  title: 'Contact Us',
+  description: 'Get in touch with BR Hospitality Group for bookings, events and enquiries across our restaurants, resorts, convention centres and catering services.',
+  alternates: { canonical: '/contact' },
+}
 
 export default async function ContactPage() {
   const [settings, verticals] = await Promise.all([getSiteSettings(), getVerticals({ onlyLive: true })])

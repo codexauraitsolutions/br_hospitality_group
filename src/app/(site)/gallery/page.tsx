@@ -1,7 +1,13 @@
+import type { Metadata } from 'next'
 import { getVerticals, getMedia } from '@/lib/firestore'
 import GalleryGrid from '@/components/sections/GalleryGrid'
 
 export const revalidate = 60
+export const metadata: Metadata = {
+  title: 'Gallery',
+  description: 'Browse photos from BR Hospitality Group’s restaurants, convention halls, resorts and farm stays across Hyderabad.',
+  alternates: { canonical: '/gallery' },
+}
 
 export default async function GalleryPage() {
   const [verticals, media] = await Promise.all([
