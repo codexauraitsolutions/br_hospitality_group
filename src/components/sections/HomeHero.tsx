@@ -1,55 +1,51 @@
 'use client'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
-import { Stagger, StaggerItem } from '@/components/motion/Reveal'
+import Reveal, { Stagger, StaggerItem } from '@/components/motion/Reveal'
 import { Vertical } from '@/types'
 
 export default function HomeHero({ verticals }: { verticals: Vertical[] }) {
   return (
-    <div className="max-w-[1280px] mx-auto px-6 md:px-10 pt-14 pb-4">
-      <motion.div
-        className="text-center mb-10"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      >
-        <motion.div
-          className="text-[.7rem] tracking-[.3em] uppercase text-gold font-semibold mb-3"
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.1 }}
-        >
-          Welcome to
-        </motion.div>
+    <div id="verticals" className="max-w-[1320px] mx-auto px-6 md:px-10 pt-20 pb-6 scroll-mt-20">
+      <Reveal className="text-center mb-12" direction="none">
+        <div className="text-[.7rem] tracking-[.3em] uppercase text-gold font-semibold mb-3">Welcome to</div>
         <div className="font-serif text-[clamp(28px,4vw,44px)] font-light">
           <strong className="font-semibold">BR Hospitality Group</strong> — Our Verticals
         </div>
-      </motion.div>
+        <div className="w-14 h-0.5 bg-gold mx-auto mt-5" />
+      </Reveal>
 
-      <Stagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {verticals.map(v => {
+      <Stagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {verticals.map((v, i) => {
           const isExternal = !!v.externalUrl
           const linkProps = isExternal
             ? { href: v.externalUrl, target: '_blank', rel: 'noopener noreferrer' }
             : { href: `/venues/${v.slug}` }
+          const big = i === 0
           return (
-            <StaggerItem key={v.slug}>
+            <StaggerItem key={v.slug} className={big ? 'sm:col-span-2 sm:row-span-2' : ''}>
               <Link {...linkProps}
-                className="group block bg-cream2 border border-border rounded-lg overflow-hidden transition-all duration-300 hover:shadow-[0_18px_40px_-12px_rgba(26,45,90,0.25)] hover:-translate-y-1.5 hover:border-gold/50">
-                <div className="overflow-hidden">
-                  {v.coverImageUrl ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={v.coverImageUrl} alt={v.name} className="w-full aspect-video object-cover transition-transform duration-500 group-hover:scale-110" />
-                  ) : (
-                    <div className="w-full aspect-video flex items-center justify-center text-4xl transition-transform duration-500 group-hover:scale-110" style={{ background: `linear-gradient(135deg, ${v.color}, ${v.color}cc)` }}>
-                      <span className="opacity-90">{v.icon}</span>
-                    </div>
-                  )}
+                className={`group relative block rounded-2xl overflow-hidden transition-all duration-500 hover:shadow-[0_24px_50px_-16px_rgba(0,0,0,0.4)] hover:-translate-y-1.5 ${big ? 'aspect-[4/3] sm:aspect-square' : 'aspect-[4/3]'}`}>
+                {v.coverImageUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={v.coverImageUrl} alt={v.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center text-5xl transition-transform duration-700 group-hover:scale-110" style={{ background: `linear-gradient(135deg, ${v.color}, ${v.color}cc)` }}>
+                    <span className="opacity-90">{v.icon}</span>
+                  </div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-300" />
+
+                <div className="absolute top-3.5 left-3.5">
+                  <span className="text-[.6rem] tracking-[.16em] uppercase text-white/85 bg-white/15 backdrop-blur-sm border border-white/20 rounded-full px-3 py-1.5">
+                    {v.category}
+                  </span>
                 </div>
-                <div className="p-6">
-                  <div className="font-serif text-lg font-semibold mb-1" style={{ color: v.color }}>{v.name}</div>
-                  <div className="text-[.72rem] text-muted mb-1">📍 {v.location}</div>
-                  <div className="text-[.68rem] text-muted mb-3">{v.category}</div>
-                  <div className="text-[.58rem] tracking-[.18em] uppercase text-gold font-semibold opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-                    {isExternal ? 'Visit Website →' : 'Book Now →'}
+
+                <div className="absolute bottom-0 left-0 right-0 p-5">
+                  <div className={`font-serif font-semibold text-white mb-1 ${big ? 'text-2xl' : 'text-lg'}`}>{v.name}</div>
+                  <div className="text-[.74rem] text-white/70 mb-2.5">📍 {v.location}</div>
+                  <div className="flex items-center gap-1.5 text-[.62rem] tracking-[.16em] uppercase text-gold2 font-semibold opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                    {isExternal ? 'Visit Website' : 'Book Now'} <span aria-hidden>→</span>
                   </div>
                 </div>
               </Link>

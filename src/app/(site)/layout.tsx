@@ -1,7 +1,7 @@
 import { getSiteSettings, getVerticals } from '@/lib/firestore'
 import NavBar from '@/components/sections/NavBar'
 import Footer from '@/components/sections/Footer'
-import WhatsAppFloat from '@/components/sections/WhatsAppFloat'
+import FloatingActionBar from '@/components/sections/FloatingActionBar'
 import ScrollToTop from '@/components/motion/ScrollToTop'
 
 export const revalidate = 60
@@ -14,10 +14,10 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
 
   return (
     <>
-      <NavBar settings={settings} />
+      <NavBar settings={settings} transparentOnHero={settings.toggles.showSlideshow} />
       {children}
       <Footer settings={settings} verticals={verticals} />
-      {settings.toggles.showWhatsappFloat && <WhatsAppFloat whatsapp={settings.whatsapp} />}
+      {settings.toggles.showWhatsappFloat && <FloatingActionBar settings={settings} />}
       <ScrollToTop />
     </>
   )

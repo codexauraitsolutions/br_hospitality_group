@@ -6,8 +6,10 @@ export default function TestimonialsGrid({ testimonials, eyebrow = 'Testimonials
 }) {
   if (!testimonials.length) return null
   return (
-    <div className="py-16">
-      <div className="max-w-[1100px] mx-auto px-6 text-center">
+    <div className="relative py-16 overflow-hidden bg-gradient-to-b from-cream/60 via-white to-white">
+      <div className="pointer-events-none absolute inset-0 opacity-[0.05]"
+        style={{ backgroundImage: 'radial-gradient(circle at 10% 10%, #c9a84c 0, transparent 30%), radial-gradient(circle at 90% 90%, #1a2d5a 0, transparent 30%)' }} />
+      <div className="relative max-w-[1100px] mx-auto px-6 text-center">
         <Reveal>
           <div className="text-[.7rem] tracking-[.3em] uppercase text-gold font-semibold mb-2">{eyebrow}</div>
           <div className="font-serif text-[clamp(24px,3vw,34px)] font-light mb-10">{title}</div>

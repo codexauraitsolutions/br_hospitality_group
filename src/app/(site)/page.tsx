@@ -1,4 +1,5 @@
-import { getSiteSettings, getVerticals, getActiveTestimonials } from '@/lib/firestore'
+import { getSiteSettings, getVerticals, getActiveTestimonials, getMedia } from '@/lib/firestore'
+import HeroSlideshow from '@/components/sections/HeroSlideshow'
 import HomeHero from '@/components/sections/HomeHero'
 import ServicesStrip from '@/components/sections/ServicesStrip'
 import IconCardGrid from '@/components/sections/IconCardGrid'
@@ -9,10 +10,11 @@ import Reveal from '@/components/motion/Reveal'
 export const revalidate = 60
 
 export default async function HomePage() {
-  const [settings, verticals, testimonials] = await Promise.all([
+  const [settings, verticals, testimonials, banners] = await Promise.all([
     getSiteSettings(),
     getVerticals({ onlyLive: true }),
     getActiveTestimonials({ homeOnly: true }),
+    getMedia({ section: 'banner', activeOnly: true }),
   ])
 
   const stats = [
@@ -22,8 +24,17 @@ export default async function HomePage() {
     { value: settings.homeStats.maxGuests, label: 'Max Guests Catered' },
   ]
 
+  // Prefer admin-uploaded homepage banners; fall back to venue cover photos so the
+  // hero still looks fully designed even before anyone uploads a dedicated banner.
+  const heroImages = (banners.length > 0 ? banners.map(b => b.url) : verticals.map(v => v.coverImageUrl).filter(Boolean)).slice(0, 6)
+
   return (
     <div>
+      {settings.toggles.showSlideshow && heroImages.length > 0 && (
+        <div className="-mt-[72px] relative z-[100]">
+          <HeroSlideshow settings={settings} images={heroImages} />
+        </div>
+      )}
       {settings.toggles.showBrandCards && <HomeHero verticals={verticals} />}
       <ServicesStrip items={settings.servicesStrip} />
       {settings.toggles.showWhyChooseUs && (
@@ -32,8 +43,9 @@ export default async function HomePage() {
       <StatsBand stats={stats} />
       {settings.toggles.showReviews && <TestimonialsGrid testimonials={testimonials} />}
       {settings.taglineband && (
-        <div className="bg-gold2/20 py-10 text-center">
-          <Reveal>
+        <div className="relative bg-gradient-to-br from-gold2/25 via-gold2/15 to-cream py-12 text-center overflow-hidden">
+          <div className="pointer-events-none absolute inset-0 opacity-[0.08]" style={{ backgroundImage: 'radial-gradient(circle at 25% 50%, #c9a84c 0, transparent 40%), radial-gradient(circle at 75% 50%, #1a2d5a 0, transparent 40%)' }} />
+          <Reveal className="relative">
             <p className="font-serif text-[clamp(18px,2.2vw,26px)] italic text-maroon">{settings.taglineband}</p>
           </Reveal>
         </div>

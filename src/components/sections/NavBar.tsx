@@ -12,7 +12,7 @@ const LINKS = [
   { href: '/contact', label: 'Contact' },
 ]
 
-export default function NavBar({ settings }: { settings: SiteSettings }) {
+export default function NavBar({ settings, transparentOnHero = false }: { settings: SiteSettings; transparentOnHero?: boolean }) {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -24,28 +24,32 @@ export default function NavBar({ settings }: { settings: SiteSettings }) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  const transparent = transparentOnHero && pathname === '/' && !scrolled
+
   return (
     <>
       {(settings.phone1 || settings.tagline) && (
-        <div className="bg-maroon text-white text-center text-[.63rem] tracking-[.22em] uppercase py-1.5 px-5 font-medium">
+        <div className="bg-maroon text-white text-center text-[.63rem] tracking-[.22em] uppercase py-1.5 px-5 font-medium relative z-[301]">
           {settings.tagline} {settings.phone1 && <><span className="text-gold2 mx-2.5">·</span>📞 {settings.phone1}</>}
         </div>
       )}
 
-      <nav className={`bg-white/90 backdrop-blur-md border-b border-border sticky top-0 z-[300] transition-shadow duration-300 ${scrolled ? 'shadow-[0_4px_20px_rgba(0,0,0,.09)]' : 'shadow-none'}`}>
+      <nav className={`sticky top-0 z-[300] border-b transition-all duration-300 ${
+        transparent ? 'bg-transparent border-transparent' : 'bg-white/90 backdrop-blur-md border-border'
+      } ${scrolled ? 'shadow-[0_4px_20px_rgba(0,0,0,.09)]' : 'shadow-none'}`}>
         <div className={`max-w-[1280px] mx-auto flex items-center justify-between px-6 md:px-10 transition-[height] duration-300 ${scrolled ? 'h-[60px]' : 'h-[72px]'}`}>
           <Link href="/" className="flex items-center gap-3">
             {settings.logoUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={settings.logoUrl} alt={settings.siteName} className={`object-contain flex-shrink-0 transition-all duration-300 ${scrolled ? 'h-9 w-9' : 'h-11 w-11'}`} />
             ) : (
-              <div className={`border-2 border-gold rounded-full flex items-center justify-center flex-col flex-shrink-0 transition-all duration-300 ${scrolled ? 'h-9 w-9' : 'h-11 w-11'}`}>
-                <div className="font-serif text-[.95rem] font-semibold text-maroon leading-none">BR</div>
+              <div className={`border-2 rounded-full flex items-center justify-center flex-col flex-shrink-0 transition-all duration-300 ${transparent ? 'border-white' : 'border-gold'} ${scrolled ? 'h-9 w-9' : 'h-11 w-11'}`}>
+                <div className={`font-serif text-[.95rem] font-semibold leading-none transition-colors duration-300 ${transparent ? 'text-white' : 'text-maroon'}`}>BR</div>
               </div>
             )}
             <div>
-              <div className="font-serif text-[1.25rem] font-semibold text-maroon tracking-wide leading-none">{settings.siteName}</div>
-              <div className="text-[.49rem] tracking-[.24em] uppercase text-muted mt-0.5">{settings.tagline}</div>
+              <div className={`font-serif text-[1.25rem] font-semibold tracking-wide leading-none transition-colors duration-300 ${transparent ? 'text-white' : 'text-maroon'}`}>{settings.siteName}</div>
+              <div className={`text-[.49rem] tracking-[.24em] uppercase mt-0.5 transition-colors duration-300 ${transparent ? 'text-white/70' : 'text-muted'}`}>{settings.tagline}</div>
             </div>
           </Link>
 
@@ -55,9 +59,11 @@ export default function NavBar({ settings }: { settings: SiteSettings }) {
               return (
                 <li key={l.href} className="relative">
                   <Link href={l.href}
-                    className={`relative py-1 text-[.67rem] font-semibold tracking-[.16em] uppercase transition-colors group ${active ? 'text-maroon' : 'text-[#555] hover:text-maroon'}`}>
+                    className={`relative py-1 text-[.67rem] font-semibold tracking-[.16em] uppercase transition-colors group ${
+                      transparent ? (active ? 'text-white' : 'text-white/75 hover:text-white') : (active ? 'text-maroon' : 'text-[#555] hover:text-maroon')
+                    }`}>
                     {l.label}
-                    <span className={`absolute left-0 -bottom-0.5 h-[1.5px] bg-gold transition-all duration-300 ${active ? 'w-full' : 'w-0 group-hover:w-full'}`} />
+                    <span className={`absolute left-0 -bottom-0.5 h-[1.5px] transition-all duration-300 ${transparent ? 'bg-gold2' : 'bg-gold'} ${active ? 'w-full' : 'w-0 group-hover:w-full'}`} />
                   </Link>
                 </li>
               )
@@ -70,7 +76,7 @@ export default function NavBar({ settings }: { settings: SiteSettings }) {
             </li>
           </ul>
 
-          <button className="md:hidden text-2xl w-9 h-9 flex items-center justify-center" onClick={() => setOpen(o => !o)} aria-label="Menu">
+          <button className={`md:hidden text-2xl w-9 h-9 flex items-center justify-center transition-colors duration-300 ${transparent ? 'text-white' : 'text-ink'}`} onClick={() => setOpen(o => !o)} aria-label="Menu">
             <motion.span animate={{ rotate: open ? 90 : 0 }} transition={{ duration: 0.2 }}>{open ? '✕' : '☰'}</motion.span>
           </button>
         </div>
