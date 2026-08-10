@@ -2,6 +2,7 @@ import { notFound, redirect } from 'next/navigation'
 import { getVerticalBySlug, getMedia, getActiveTestimonials } from '@/lib/firestore'
 import BookingForm from '@/components/sections/BookingForm'
 import VenueHero from '@/components/sections/VenueHero'
+import VenueGallery from '@/components/sections/VenueGallery'
 import { Stagger, StaggerItem } from '@/components/motion/Reveal'
 import { VerticalSlug } from '@/types'
 
@@ -43,19 +44,7 @@ export default async function VerticalDetailPage({ params }: { params: { slug: s
     <div>
       <VenueHero vertical={vertical} images={heroImages} />
 
-      {images.length > 0 && (
-        <div className={`grid gap-1 overflow-hidden ${
-          images.length === 1 ? 'grid-cols-1' : images.length === 2 ? 'grid-cols-2' : images.length === 3 ? 'grid-cols-3' : 'grid-cols-2 md:grid-cols-4'
-        }`}>
-          {images.slice(0, 5).map(img => (
-            <div key={img.id} className="overflow-hidden">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={img.url} alt={img.caption || vertical.name}
-                className="w-full aspect-[4/3] md:aspect-[16/10] object-cover transition-transform duration-700 hover:scale-105" />
-            </div>
-          ))}
-        </div>
-      )}
+      <VenueGallery images={images} venueName={vertical.name} />
 
       <div className="max-w-[1100px] mx-auto px-6 py-14 grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-12">
         <div>
@@ -83,20 +72,6 @@ export default async function VerticalDetailPage({ params }: { params: { slug: s
               <div className="flex flex-wrap gap-2">
                 {vertical.amenities.map((a, i) => (
                   <span key={i} className="bg-cream2 border border-border rounded-full px-3.5 py-1.5 text-[.74rem] transition-all duration-200 hover:border-gold hover:-translate-y-0.5">{a}</span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {images.length > 5 && (
-            <div className="mb-8">
-              <div className="text-[.65rem] font-bold uppercase tracking-[.16em] text-muted mb-2.5">Gallery</div>
-              <div className="grid grid-cols-3 gap-2">
-                {images.map(img => (
-                  <div key={img.id} className="overflow-hidden rounded-md">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={img.url} alt={img.caption || vertical.name} className="aspect-square object-cover transition-transform duration-500 hover:scale-110" />
-                  </div>
                 ))}
               </div>
             </div>

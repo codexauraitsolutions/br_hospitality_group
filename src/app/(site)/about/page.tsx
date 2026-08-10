@@ -40,39 +40,43 @@ export default async function AboutPage() {
         </Reveal>
       </div>
 
-      <div className="max-w-[1100px] mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-2 gap-14 items-start">
-        <Reveal direction="left">
+      <div className="max-w-[760px] mx-auto px-6 py-16 text-center">
+        <Reveal>
           <div className="text-[.7rem] tracking-[.3em] uppercase text-gold font-semibold mb-2">Who We Are</div>
           <h2 className="font-serif text-[clamp(24px,3vw,34px)] font-light mb-4">{settings.aboutIntroTitle}</h2>
-          <div className="w-10 h-0.5 bg-gold mb-5" />
+          <div className="w-10 h-0.5 bg-gold mx-auto mb-5" />
           <p className="text-[.85rem] leading-relaxed text-muted mb-4">{settings.aboutIntroText1}</p>
           <p className="text-[.85rem] leading-relaxed text-muted mb-6">{settings.aboutIntroText2}</p>
-          <div className="flex gap-3 flex-wrap">
+          <div className="flex gap-3 flex-wrap justify-center">
             <Link href="/contact" className="inline-block bg-gold text-white text-[.7rem] font-semibold uppercase tracking-wider px-5 py-3 rounded transition-all hover:-translate-y-0.5 hover:shadow-md">Enquire Now →</Link>
             <Link href="/" className="inline-block border border-border text-ink text-[.7rem] font-semibold uppercase tracking-wider px-5 py-3 rounded transition-all hover:-translate-y-0.5 hover:border-maroon">Our Brands →</Link>
           </div>
         </Reveal>
-        <Reveal direction="right" delay={0.1}>
-          <div className="bg-cream2 border border-border rounded-lg aspect-square flex items-center justify-center text-6xl transition-transform duration-500 hover:scale-105">🏛️</div>
-        </Reveal>
       </div>
 
       {founder && (
-        <div className="relative bg-cream2 border-y border-border py-16 overflow-hidden">
-          <div className="pointer-events-none absolute inset-0 opacity-[0.06]" style={{ backgroundImage: 'radial-gradient(circle at 85% 20%, #c9a84c 0, transparent 35%)' }} />
-          <div className="relative max-w-[1000px] mx-auto px-6 grid grid-cols-1 md:grid-cols-[minmax(0,320px)_1fr] gap-10 items-center">
+        <div className="relative bg-gradient-to-br from-maroon to-maroon2 py-20 overflow-hidden">
+          <div className="pointer-events-none absolute inset-0 opacity-[0.08]"
+            style={{ backgroundImage: 'radial-gradient(circle at 85% 15%, #c9a84c 0, transparent 35%), radial-gradient(circle at 10% 85%, white 0, transparent 30%)' }} />
+          <div className="relative max-w-[1050px] mx-auto px-6 grid grid-cols-1 md:grid-cols-[minmax(0,340px)_1fr] gap-12 items-center">
             <Reveal direction="left">
-              <div className="relative mx-auto md:mx-0 w-full max-w-[280px] aspect-square rounded-2xl overflow-hidden shadow-[0_24px_50px_-16px_rgba(26,45,90,0.35)] border-4 border-white">
-                <FounderPhoto photoUrl={founder.photoUrl} name={founder.name} />
+              <div className="relative mx-auto md:mx-0 w-full max-w-[320px]">
+                <div className="absolute -inset-3 border border-gold2/40 rounded-2xl" />
+                <div className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-[0_30px_60px_-16px_rgba(0,0,0,0.5)] border-4 border-white">
+                  <FounderPhoto photoUrl={founder.photoUrl} name={founder.name} />
+                </div>
+                <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-gold text-white text-[.62rem] font-semibold uppercase tracking-wider px-4 py-2 rounded-full shadow-lg whitespace-nowrap">
+                  30+ Years of Leadership
+                </div>
               </div>
             </Reveal>
             <Reveal direction="right" delay={0.1}>
-              <div className="text-[.7rem] tracking-[.3em] uppercase text-gold font-semibold mb-2">Meet Our Founder</div>
-              <div className="font-serif text-[clamp(24px,3vw,32px)] font-light mb-1">{founder.name}</div>
-              <div className="text-[.72rem] text-maroon uppercase tracking-wider font-semibold mb-4">{founder.role}</div>
-              <div className="w-10 h-0.5 bg-gold mb-4" />
+              <div className="font-serif text-6xl text-gold2/30 leading-none mb-2 select-none">&ldquo;</div>
+              <div className="text-[.72rem] tracking-[.3em] uppercase text-gold2 font-semibold mb-2 -mt-4">Meet Our Founder</div>
+              <div className="font-serif text-[clamp(28px,3.5vw,40px)] font-light text-white mb-1">{founder.name}</div>
+              <div className="text-[.74rem] text-gold2 uppercase tracking-wider font-semibold mb-5">{founder.role}</div>
               {founder.bio.split('\n\n').map((p, i) => (
-                <p key={i} className="text-[.85rem] leading-relaxed text-muted mb-3 last:mb-0">{p}</p>
+                <p key={i} className="text-[.87rem] leading-relaxed text-white/75 mb-3 last:mb-0">{p}</p>
               ))}
             </Reveal>
           </div>

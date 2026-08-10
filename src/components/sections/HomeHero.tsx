@@ -15,16 +15,15 @@ export default function HomeHero({ verticals }: { verticals: Vertical[] }) {
       </Reveal>
 
       <Stagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {verticals.map((v, i) => {
+        {verticals.map(v => {
           const isExternal = !!v.externalUrl
           const linkProps = isExternal
             ? { href: v.externalUrl, target: '_blank', rel: 'noopener noreferrer' }
             : { href: `/venues/${v.slug}` }
-          const big = i === 0
           return (
-            <StaggerItem key={v.slug} className={big ? 'sm:col-span-2 sm:row-span-2' : ''}>
+            <StaggerItem key={v.slug}>
               <Link {...linkProps}
-                className={`group relative block rounded-2xl overflow-hidden transition-all duration-500 hover:shadow-[0_24px_50px_-16px_rgba(0,0,0,0.4)] hover:-translate-y-1.5 ${big ? 'aspect-[4/3] sm:aspect-square' : 'aspect-[4/3]'}`}>
+                className="group relative block aspect-[4/3] rounded-2xl overflow-hidden transition-all duration-500 hover:shadow-[0_24px_50px_-16px_rgba(0,0,0,0.4)] hover:-translate-y-1.5">
                 {v.coverImageUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={v.coverImageUrl} alt={v.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
@@ -42,7 +41,7 @@ export default function HomeHero({ verticals }: { verticals: Vertical[] }) {
                 </div>
 
                 <div className="absolute bottom-0 left-0 right-0 p-5">
-                  <div className={`font-serif font-semibold text-white mb-1 ${big ? 'text-2xl' : 'text-lg'}`}>{v.name}</div>
+                  <div className="font-serif font-semibold text-white mb-1 text-lg">{v.name}</div>
                   <div className="text-[.74rem] text-white/70 mb-2.5">📍 {v.location}</div>
                   <div className="flex items-center gap-1.5 text-[.62rem] tracking-[.16em] uppercase text-gold2 font-semibold opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
                     {isExternal ? 'Visit Website' : 'Book Now'} <span aria-hidden>→</span>
