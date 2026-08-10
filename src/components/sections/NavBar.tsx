@@ -85,7 +85,7 @@ export default function NavBar({ settings, transparentOnHero = false }: { settin
       <AnimatePresence>
         {open && (
           <motion.div
-            className="md:hidden fixed inset-0 bg-black/40 z-[299]"
+            className="md:hidden fixed inset-0 bg-black/40 z-[400]"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             onClick={() => setOpen(false)}
           >
