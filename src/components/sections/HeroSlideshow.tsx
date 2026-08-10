@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { SiteSettings } from '@/types'
 
-export default function HeroSlideshow({ settings, images }: { settings: SiteSettings; images: string[] }) {
+export default function HeroSlideshow({ settings, images, venueCount }: { settings: SiteSettings; images: string[]; venueCount: number }) {
   const [index, setIndex] = useState(0)
   const { scrollY } = useScroll()
   const y = useTransform(scrollY, [0, 600], [0, 150])
@@ -56,7 +56,7 @@ export default function HeroSlideshow({ settings, images }: { settings: SiteSett
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.3 }}
           className="mt-5 text-white/75 text-sm md:text-base max-w-xl leading-relaxed"
         >
-          Seven distinct venues across Hyderabad — fine dining, grand conventions, luxury resorts, farm stays and catering, all under one legacy.
+          {venueCount || 'Several'} distinct venues across Hyderabad — fine dining, grand conventions, luxury resorts, farm stays and catering, all under one legacy.
         </motion.p>
         <motion.div
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.45 }}

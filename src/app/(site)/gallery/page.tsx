@@ -25,7 +25,7 @@ export default async function GalleryPage() {
           <div className="text-[.7rem] tracking-[.3em] uppercase text-gold2 mb-3">Our Gallery</div>
           <h1 className="font-serif text-[clamp(30px,4.5vw,48px)] font-light mb-4">Moments Worth Remembering</h1>
           <p className="max-w-xl mx-auto text-white/70 text-sm leading-relaxed">
-            A glimpse into the celebrations, stays and experiences across all seven of our venues.
+            A glimpse into the celebrations, stays and experiences across all {verticals.length} of our venues.
           </p>
         </Reveal>
       </div>

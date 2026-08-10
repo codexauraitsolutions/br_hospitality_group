@@ -34,7 +34,7 @@ export default async function HomePage() {
     <div>
       {settings.toggles.showSlideshow && heroImages.length > 0 && (
         <div className="-mt-[72px] relative z-[100]">
-          <HeroSlideshow settings={settings} images={heroImages} />
+          <HeroSlideshow settings={settings} images={heroImages} venueCount={verticals.length} />
         </div>
       )}
       {settings.toggles.showBrandCards && <HomeHero verticals={verticals} />}
