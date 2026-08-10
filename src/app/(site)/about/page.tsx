@@ -8,7 +8,7 @@ import Link from 'next/link'
 export const revalidate = 60
 export const metadata: Metadata = {
   title: 'About Us',
-  description: 'Learn about BR Hospitality Group — 15+ years running premium restaurants, convention centres, resorts, farm stays and catering across Hyderabad.',
+  description: 'Learn about BR Hospitality Group — 30+ years running premium restaurants, convention centres, resorts, farm stays and catering across Hyderabad.',
   alternates: { canonical: '/about' },
 }
 
@@ -75,7 +75,9 @@ export default async function AboutPage() {
               <div className="font-serif text-[clamp(24px,3vw,32px)] font-light mb-1">{founder.name}</div>
               <div className="text-[.72rem] text-maroon uppercase tracking-wider font-semibold mb-4">{founder.role}</div>
               <div className="w-10 h-0.5 bg-gold mb-4" />
-              <p className="text-[.85rem] leading-relaxed text-muted whitespace-pre-line">{founder.bio}</p>
+              {founder.bio.split('\n\n').map((p, i) => (
+                <p key={i} className="text-[.85rem] leading-relaxed text-muted mb-3 last:mb-0">{p}</p>
+              ))}
             </Reveal>
           </div>
         </div>
