@@ -1,10 +1,11 @@
 import Link from 'next/link'
 import { SiteSettings, Vertical } from '@/types'
+import Reveal from '@/components/motion/Reveal'
 
 export default function Footer({ settings, verticals }: { settings: SiteSettings; verticals: Vertical[] }) {
   return (
     <footer className="bg-[#1a1712] text-white/70">
-      <div className="max-w-[1280px] mx-auto px-6 md:px-10 py-16 grid grid-cols-1 md:grid-cols-4 gap-10">
+      <Reveal y={16} className="max-w-[1280px] mx-auto px-6 md:px-10 py-16 grid grid-cols-1 md:grid-cols-4 gap-10">
         <div>
           {settings.logoUrl && (
             // eslint-disable-next-line @next/next/no-img-element
@@ -58,7 +59,7 @@ export default function Footer({ settings, verticals }: { settings: SiteSettings
             </div>
           )}
         </div>
-      </div>
+      </Reveal>
 
       <div className="border-t border-white/10 py-5 text-center text-[.68rem] text-white/35">
         © {new Date().getFullYear()} {settings.siteName} · All Rights Reserved

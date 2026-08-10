@@ -4,6 +4,7 @@ import ServicesStrip from '@/components/sections/ServicesStrip'
 import IconCardGrid from '@/components/sections/IconCardGrid'
 import StatsBand from '@/components/sections/StatsBand'
 import TestimonialsGrid from '@/components/sections/TestimonialsGrid'
+import Reveal from '@/components/motion/Reveal'
 
 export const revalidate = 60
 
@@ -32,7 +33,9 @@ export default async function HomePage() {
       {settings.toggles.showReviews && <TestimonialsGrid testimonials={testimonials} />}
       {settings.taglineband && (
         <div className="bg-gold2/20 py-10 text-center">
-          <p className="font-serif text-[clamp(18px,2.2vw,26px)] italic text-maroon">{settings.taglineband}</p>
+          <Reveal>
+            <p className="font-serif text-[clamp(18px,2.2vw,26px)] italic text-maroon">{settings.taglineband}</p>
+          </Reveal>
         </div>
       )}
     </div>

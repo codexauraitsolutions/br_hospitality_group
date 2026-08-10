@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { getSiteSettings, getVerticals } from '@/lib/firestore'
 import ContactForm from '@/components/sections/ContactForm'
+import Reveal from '@/components/motion/Reveal'
 
 export const revalidate = 60
 export const metadata: Metadata = {
@@ -15,16 +16,20 @@ export default async function ContactPage() {
 
   return (
     <div>
-      <div className="bg-gradient-to-br from-maroon to-maroon2 text-white text-center py-20 px-6">
-        <div className="text-[.7rem] tracking-[.3em] uppercase text-gold2 mb-3">Get In Touch</div>
-        <h1 className="font-serif text-[clamp(30px,4.5vw,48px)] font-light mb-4">Contact Us</h1>
-        <p className="max-w-xl mx-auto text-white/70 text-sm leading-relaxed">
-          We&apos;d love to hear from you. Reach out for bookings, enquiries or just to say hello!
-        </p>
+      <div className="relative bg-gradient-to-br from-maroon to-maroon2 text-white text-center py-20 px-6 overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 opacity-[0.08]"
+          style={{ backgroundImage: 'radial-gradient(circle at 15% 25%, white 0, transparent 35%), radial-gradient(circle at 85% 75%, white 0, transparent 35%)' }} />
+        <Reveal className="relative" direction="none">
+          <div className="text-[.7rem] tracking-[.3em] uppercase text-gold2 mb-3">Get In Touch</div>
+          <h1 className="font-serif text-[clamp(30px,4.5vw,48px)] font-light mb-4">Contact Us</h1>
+          <p className="max-w-xl mx-auto text-white/70 text-sm leading-relaxed">
+            We&apos;d love to hear from you. Reach out for bookings, enquiries or just to say hello!
+          </p>
+        </Reveal>
       </div>
 
       <div className="max-w-[1100px] mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-[1fr_1.4fr] gap-12">
-        <div>
+        <Reveal direction="left">
           <div className="bg-cream2 border border-border rounded-lg p-6 mb-6">
             <div className="font-serif text-lg font-semibold mb-5">Contact Information</div>
             {settings.address && (
@@ -65,7 +70,7 @@ export default async function ContactPage() {
                 {verticals.map(v => (
                   <Link key={v.slug} href={v.externalUrl || `/venues/${v.slug}`}
                     {...(v.externalUrl ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                    className="flex items-center justify-between border border-border rounded-lg px-4 py-2.5 hover:border-gold transition-colors">
+                    className="flex items-center justify-between border border-border rounded-lg px-4 py-2.5 transition-all duration-200 hover:border-gold hover:-translate-y-0.5 hover:shadow-sm">
                     <span className="text-[.78rem]">{v.icon} {v.short}</span>
                     <span className="text-[.62rem] text-gold uppercase tracking-wider">{v.externalUrl ? 'Visit →' : 'Book Now →'}</span>
                   </Link>
@@ -73,11 +78,11 @@ export default async function ContactPage() {
               </div>
             </div>
           )}
-        </div>
+        </Reveal>
 
-        <div>
+        <Reveal direction="right" delay={0.1}>
           <ContactForm verticals={verticals} />
-        </div>
+        </Reveal>
       </div>
     </div>
   )

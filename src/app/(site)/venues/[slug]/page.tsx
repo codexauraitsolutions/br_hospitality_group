@@ -1,6 +1,7 @@
 import { notFound, redirect } from 'next/navigation'
 import { getVerticalBySlug, getMedia, getActiveTestimonials } from '@/lib/firestore'
 import BookingForm from '@/components/sections/BookingForm'
+import Reveal, { Stagger, StaggerItem } from '@/components/motion/Reveal'
 import { VerticalSlug } from '@/types'
 
 export const revalidate = 60
@@ -37,12 +38,22 @@ export default async function VerticalDetailPage({ params }: { params: { slug: s
 
   return (
     <div>
-      <div className="relative py-24 px-6 text-white text-center" style={{ background: `linear-gradient(135deg, ${vertical.color}, ${vertical.color}cc)` }}>
-        <div className="text-[.7rem] tracking-[.3em] uppercase text-white/70 mb-3">{vertical.category}</div>
-        <h1 className="font-serif text-[clamp(30px,4.5vw,48px)] font-light mb-3">{vertical.icon} {vertical.name}</h1>
-        <div className="text-sm text-white/80">
-          📍 {vertical.location}
-          {vertical.status === 'draft' && <span className="ml-3 bg-amber-500/80 text-white text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full">Coming Soon</span>}
+      <div className="relative py-24 px-6 text-white text-center overflow-hidden" style={{ background: `linear-gradient(135deg, ${vertical.color}, ${vertical.color}cc)` }}>
+        <div className="pointer-events-none absolute inset-0 opacity-[0.08]"
+          style={{ backgroundImage: 'radial-gradient(circle at 15% 25%, white 0, transparent 35%), radial-gradient(circle at 85% 75%, white 0, transparent 35%)' }} />
+        <div className="relative">
+          <Reveal direction="none">
+            <div className="text-[.7rem] tracking-[.3em] uppercase text-white/70 mb-3">{vertical.category}</div>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <h1 className="font-serif text-[clamp(30px,4.5vw,48px)] font-light mb-3">{vertical.icon} {vertical.name}</h1>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <div className="text-sm text-white/80">
+              📍 {vertical.location}
+              {vertical.status === 'draft' && <span className="ml-3 bg-amber-500/80 text-white text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full">Coming Soon</span>}
+            </div>
+          </Reveal>
         </div>
       </div>
 
@@ -51,23 +62,27 @@ export default async function VerticalDetailPage({ params }: { params: { slug: s
           images.length === 1 ? 'grid-cols-1' : images.length === 2 ? 'grid-cols-2' : images.length === 3 ? 'grid-cols-3' : 'grid-cols-2 md:grid-cols-4'
         }`}>
           {images.slice(0, 5).map(img => (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img key={img.id} src={img.url} alt={img.caption || vertical.name}
-              className="w-full aspect-[4/3] md:aspect-[16/10] object-cover" />
+            <div key={img.id} className="overflow-hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={img.url} alt={img.caption || vertical.name}
+                className="w-full aspect-[4/3] md:aspect-[16/10] object-cover transition-transform duration-700 hover:scale-105" />
+            </div>
           ))}
         </div>
       )}
 
       <div className="max-w-[1100px] mx-auto px-6 py-14 grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-12">
         <div>
-          <div className="grid grid-cols-3 gap-4 mb-8">
+          <Stagger className="grid grid-cols-3 gap-4 mb-8">
             {vertical.highlights.map((h, i) => (
-              <div key={i} className="bg-cream2 border border-border rounded-lg py-4 text-center">
-                <div className="font-serif text-xl font-semibold" style={{ color: vertical.color }}>{h.value}</div>
-                <div className="text-[.62rem] text-muted uppercase tracking-wider mt-1">{h.label}</div>
-              </div>
+              <StaggerItem key={i}>
+                <div className="bg-cream2 border border-border rounded-lg py-4 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+                  <div className="font-serif text-xl font-semibold" style={{ color: vertical.color }}>{h.value}</div>
+                  <div className="text-[.62rem] text-muted uppercase tracking-wider mt-1">{h.label}</div>
+                </div>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
 
           <div className="mb-8">
             <div className="text-[.65rem] font-bold uppercase tracking-[.16em] text-muted mb-2.5">About</div>
@@ -81,7 +96,7 @@ export default async function VerticalDetailPage({ params }: { params: { slug: s
               <div className="text-[.65rem] font-bold uppercase tracking-[.16em] text-muted mb-2.5">Amenities</div>
               <div className="flex flex-wrap gap-2">
                 {vertical.amenities.map((a, i) => (
-                  <span key={i} className="bg-cream2 border border-border rounded-full px-3.5 py-1.5 text-[.74rem]">{a}</span>
+                  <span key={i} className="bg-cream2 border border-border rounded-full px-3.5 py-1.5 text-[.74rem] transition-all duration-200 hover:border-gold hover:-translate-y-0.5">{a}</span>
                 ))}
               </div>
             </div>
@@ -92,8 +107,10 @@ export default async function VerticalDetailPage({ params }: { params: { slug: s
               <div className="text-[.65rem] font-bold uppercase tracking-[.16em] text-muted mb-2.5">Gallery</div>
               <div className="grid grid-cols-3 gap-2">
                 {images.map(img => (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img key={img.id} src={img.url} alt={img.caption || vertical.name} className="aspect-square object-cover rounded-md" />
+                  <div key={img.id} className="overflow-hidden rounded-md">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={img.url} alt={img.caption || vertical.name} className="aspect-square object-cover transition-transform duration-500 hover:scale-110" />
+                  </div>
                 ))}
               </div>
             </div>
