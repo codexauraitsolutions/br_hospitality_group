@@ -105,6 +105,7 @@ export interface TeamMember {
   name:          string
   role:          string
   bio:           string
+  photoUrl:      string
   photoMediaId:  string | null
   sortOrder:     number
   active:        boolean

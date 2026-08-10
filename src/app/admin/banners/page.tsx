@@ -14,7 +14,7 @@ const TOGGLE_LABELS: Record<keyof SiteToggles, string> = {
   showVideos: 'Show Venue Videos',
   showGallery: 'Photo Gallery Section',
   showReviews: 'Guest Reviews Section',
-  showWhatsappFloat: 'WhatsApp Floating Button',
+  showWhatsappFloat: 'Floating Contact Bar (Call / WhatsApp / Enquire / Location)',
   showWhyChooseUs: 'Show Why Choose Us Section',
 }
 

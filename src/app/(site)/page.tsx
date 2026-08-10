@@ -17,10 +17,12 @@ export default async function HomePage() {
     getMedia({ section: 'banner', activeOnly: true }),
   ])
 
+  // Venue count always reflects the actual live verticals — not a manually-typed
+  // number that goes stale the moment a vertical is added or deactivated.
   const stats = [
     { value: settings.homeStats.years, label: 'Years of Excellence' },
     { value: settings.homeStats.guests, label: 'Happy Guests' },
-    { value: settings.homeStats.venues, label: 'Premium Venues' },
+    { value: String(verticals.length), label: 'Premium Venues' },
     { value: settings.homeStats.maxGuests, label: 'Max Guests Catered' },
   ]
 

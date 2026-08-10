@@ -1,7 +1,8 @@
 import { notFound, redirect } from 'next/navigation'
 import { getVerticalBySlug, getMedia, getActiveTestimonials } from '@/lib/firestore'
 import BookingForm from '@/components/sections/BookingForm'
-import Reveal, { Stagger, StaggerItem } from '@/components/motion/Reveal'
+import VenueHero from '@/components/sections/VenueHero'
+import { Stagger, StaggerItem } from '@/components/motion/Reveal'
 import { VerticalSlug } from '@/types'
 
 export const revalidate = 60
@@ -36,26 +37,11 @@ export default async function VerticalDetailPage({ params }: { params: { slug: s
     getActiveTestimonials({ verticalSlug: slug }),
   ])
 
+  const heroImages = [vertical.coverImageUrl, ...images.map(i => i.url)].filter(Boolean).slice(0, 5) as string[]
+
   return (
     <div>
-      <div className="relative py-24 px-6 text-white text-center overflow-hidden" style={{ background: `linear-gradient(135deg, ${vertical.color}, ${vertical.color}cc)` }}>
-        <div className="pointer-events-none absolute inset-0 opacity-[0.08]"
-          style={{ backgroundImage: 'radial-gradient(circle at 15% 25%, white 0, transparent 35%), radial-gradient(circle at 85% 75%, white 0, transparent 35%)' }} />
-        <div className="relative">
-          <Reveal direction="none">
-            <div className="text-[.7rem] tracking-[.3em] uppercase text-white/70 mb-3">{vertical.category}</div>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <h1 className="font-serif text-[clamp(30px,4.5vw,48px)] font-light mb-3">{vertical.icon} {vertical.name}</h1>
-          </Reveal>
-          <Reveal delay={0.2}>
-            <div className="text-sm text-white/80">
-              📍 {vertical.location}
-              {vertical.status === 'draft' && <span className="ml-3 bg-amber-500/80 text-white text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full">Coming Soon</span>}
-            </div>
-          </Reveal>
-        </div>
-      </div>
+      <VenueHero vertical={vertical} images={heroImages} />
 
       {images.length > 0 && (
         <div className={`grid gap-1 overflow-hidden ${

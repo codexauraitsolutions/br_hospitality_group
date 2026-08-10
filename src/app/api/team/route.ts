@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
 
   const ref = await adminDb().collection('team_members').add({
     name: body.name || '', role: body.role || '', bio: body.bio || '',
-    photoMediaId: body.photoMediaId || null, active: true, sortOrder: countSnap.size,
+    photoUrl: body.photoUrl || '', photoMediaId: body.photoMediaId || null, active: true, sortOrder: countSnap.size,
   })
 
   await logActivity(`Team member "${body.name}" added`, 'edit', staff.email)
