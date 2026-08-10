@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { getSiteSettings, getTeamMembers, getVerticals } from '@/lib/firestore'
 import IconCardGrid from '@/components/sections/IconCardGrid'
 import StatsBand from '@/components/sections/StatsBand'
+import FounderPhoto from '@/components/sections/FounderPhoto'
 import Reveal, { Stagger, StaggerItem } from '@/components/motion/Reveal'
 import Link from 'next/link'
 
@@ -62,12 +63,7 @@ export default async function AboutPage() {
           <div className="relative max-w-[1000px] mx-auto px-6 grid grid-cols-1 md:grid-cols-[minmax(0,320px)_1fr] gap-10 items-center">
             <Reveal direction="left">
               <div className="relative mx-auto md:mx-0 w-full max-w-[280px] aspect-square rounded-2xl overflow-hidden shadow-[0_24px_50px_-16px_rgba(26,45,90,0.35)] border-4 border-white">
-                {founder.photoUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={founder.photoUrl} alt={founder.name} className="w-full h-full object-cover" />
-                ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-maroon to-maroon2 flex items-center justify-center text-6xl text-white/80">👤</div>
-                )}
+                <FounderPhoto photoUrl={founder.photoUrl} name={founder.name} />
               </div>
             </Reveal>
             <Reveal direction="right" delay={0.1}>
