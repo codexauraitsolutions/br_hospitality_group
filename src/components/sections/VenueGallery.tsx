@@ -19,7 +19,7 @@ export default function VenueGallery({ images, venueName }: { images: MediaItem[
         {images.slice(0, 5).map((img, i) => (
           <button key={img.id} onClick={() => setActiveIndex(i)} className="overflow-hidden cursor-zoom-in block w-full">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={img.url} alt={img.caption || venueName}
+            <img src={img.url} alt={img.caption || venueName} loading={i === 0 ? 'eager' : 'lazy'} decoding="async"
               className="w-full aspect-[4/3] md:aspect-[16/10] object-cover transition-transform duration-700 hover:scale-105" />
           </button>
         ))}
@@ -32,7 +32,7 @@ export default function VenueGallery({ images, venueName }: { images: MediaItem[
             {images.map((img, i) => (
               <button key={img.id} onClick={() => setActiveIndex(i)} className="overflow-hidden rounded-md cursor-zoom-in block w-full">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={img.url} alt={img.caption || venueName} className="aspect-square object-cover transition-transform duration-500 hover:scale-110" />
+                <img src={img.url} alt={img.caption || venueName} loading="lazy" decoding="async" className="aspect-square object-cover transition-transform duration-500 hover:scale-110" />
               </button>
             ))}
           </div>

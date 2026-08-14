@@ -39,7 +39,7 @@ export default function GalleryGrid({ media, verticals }: { media: MediaItem[]; 
               >
                 {m.type === 'image' ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={m.url} alt={m.caption || m.filename} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                  <img src={m.url} alt={m.caption || m.filename} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                 ) : (
                   <video src={m.url} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" muted />
                 )}

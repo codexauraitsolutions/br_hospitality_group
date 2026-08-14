@@ -26,7 +26,7 @@ export default function HomeHero({ verticals }: { verticals: Vertical[] }) {
                 className="group relative block aspect-[4/3] rounded-2xl overflow-hidden transition-all duration-500 hover:shadow-[0_24px_50px_-16px_rgba(0,0,0,0.4)] hover:-translate-y-1.5">
                 {v.coverImageUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={v.coverImageUrl} alt={v.name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  <img src={v.coverImageUrl} alt={v.name} loading="lazy" decoding="async" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center text-5xl transition-transform duration-700 group-hover:scale-110" style={{ background: `linear-gradient(135deg, ${v.color}, ${v.color}cc)` }}>
                     <span className="opacity-90">{v.icon}</span>
