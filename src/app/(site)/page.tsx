@@ -4,7 +4,6 @@ import HomeHero from '@/components/sections/HomeHero'
 import ServicesStrip from '@/components/sections/ServicesStrip'
 import IconCardGrid from '@/components/sections/IconCardGrid'
 import StatsBand from '@/components/sections/StatsBand'
-import FounderSpotlight from '@/components/sections/FounderSpotlight'
 import TestimonialsGrid from '@/components/sections/TestimonialsGrid'
 import Reveal from '@/components/motion/Reveal'
 
@@ -38,7 +37,7 @@ export default async function HomePage() {
     <div>
       {settings.toggles.showSlideshow && heroImages.length > 0 && (
         <div className="-mt-[72px] relative z-[100]">
-          <HeroSlideshow settings={settings} images={heroImages} venueCount={verticals.length} />
+          <HeroSlideshow settings={settings} images={heroImages} venueCount={verticals.length} founder={founder} />
         </div>
       )}
       {settings.toggles.showBrandCards && <HomeHero verticals={verticals} />}
@@ -47,7 +46,6 @@ export default async function HomePage() {
         <IconCardGrid eyebrow="Why Choose Us" title={<>Why Families &amp; Corporates <strong className="italic font-normal">Choose Us</strong></>} items={settings.whyChooseUs} />
       )}
       <StatsBand stats={stats} />
-      {founder && <FounderSpotlight founder={founder} />}
       {settings.toggles.showReviews && <TestimonialsGrid testimonials={testimonials} />}
       {settings.taglineband && (
         <div className="relative bg-gradient-to-br from-gold2/25 via-gold2/15 to-cream py-12 text-center overflow-hidden">
