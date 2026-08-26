@@ -1,21 +1,25 @@
-import { getSiteSettings, getVerticals, getActiveTestimonials, getMedia } from '@/lib/firestore'
+import { getSiteSettings, getVerticals, getActiveTestimonials, getMedia, getTeamMembers } from '@/lib/firestore'
 import HeroSlideshow from '@/components/sections/HeroSlideshow'
 import HomeHero from '@/components/sections/HomeHero'
 import ServicesStrip from '@/components/sections/ServicesStrip'
 import IconCardGrid from '@/components/sections/IconCardGrid'
 import StatsBand from '@/components/sections/StatsBand'
+import FounderSpotlight from '@/components/sections/FounderSpotlight'
 import TestimonialsGrid from '@/components/sections/TestimonialsGrid'
 import Reveal from '@/components/motion/Reveal'
 
 export const revalidate = 60
 
 export default async function HomePage() {
-  const [settings, verticals, testimonials, banners] = await Promise.all([
+  const [settings, verticals, testimonials, banners, team] = await Promise.all([
     getSiteSettings(),
     getVerticals({ onlyLive: true }),
     getActiveTestimonials({ homeOnly: true }),
     getMedia({ section: 'banner', activeOnly: true }),
+    getTeamMembers(),
   ])
+
+  const founder = team.find(m => /founder/i.test(m.role))
 
   // Venue count always reflects the actual live verticals — not a manually-typed
   // number that goes stale the moment a vertical is added or deactivated.
@@ -43,6 +47,7 @@ export default async function HomePage() {
         <IconCardGrid eyebrow="Why Choose Us" title={<>Why Families &amp; Corporates <strong className="italic font-normal">Choose Us</strong></>} items={settings.whyChooseUs} />
       )}
       <StatsBand stats={stats} />
+      {founder && <FounderSpotlight founder={founder} />}
       {settings.toggles.showReviews && <TestimonialsGrid testimonials={testimonials} />}
       {settings.taglineband && (
         <div className="relative bg-gradient-to-br from-gold2/25 via-gold2/15 to-cream py-12 text-center overflow-hidden">
