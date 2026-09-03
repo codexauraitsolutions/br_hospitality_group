@@ -6,6 +6,8 @@ import { getSiteSettings } from "@/lib/firestore";
 import "./globals.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+// Falls back to the group's GA4 property when no override is set in admin - SEO settings.
+const DEFAULT_GA_ID = "G-RGDK5ECM9B";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -61,6 +63,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const settings = await getSiteSettings();
+  const gaId = settings.gaId || DEFAULT_GA_ID;
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -85,14 +88,14 @@ export default async function RootLayout({
         />
         {children}
         <Toaster position="top-right" />
-        {settings.gaId && (
+        {gaId && (
           <>
-            <Script src={`https://www.googletagmanager.com/gtag/js?id=${settings.gaId}`} strategy="afterInteractive" />
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} strategy="afterInteractive" />
             <Script id="ga-init" strategy="afterInteractive">
               {`window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
-                gtag('config', '${settings.gaId}');`}
+                gtag('config', '${gaId}');`}
             </Script>
           </>
         )}
