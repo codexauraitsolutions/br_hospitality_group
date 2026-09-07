@@ -133,6 +133,7 @@ export interface SiteToggles {
   showReviews:         boolean
   showWhatsappFloat:   boolean
   showWhyChooseUs:     boolean
+  showPaymentDetails:  boolean
 }
 
 export interface IconCard {
@@ -176,6 +177,13 @@ export interface SiteSettings {
   taglineband:                string
   logoUrl:                    string
   logoMediaId:                string | null
+  bankAccountName:            string
+  bankAccountNumber:          string
+  bankIfsc:                   string
+  bankName:                   string
+  bankBranch:                 string
+  upiId:                      string
+  upiQrUrl:                   string
 }
 
 export type StaffRole = 'super_admin' | 'manager'

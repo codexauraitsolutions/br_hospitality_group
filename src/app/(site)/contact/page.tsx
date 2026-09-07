@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { getSiteSettings, getVerticals } from '@/lib/firestore'
 import ContactForm from '@/components/sections/ContactForm'
 import Reveal from '@/components/motion/Reveal'
+import PaymentDetails from '@/components/sections/PaymentDetails'
 
 export const revalidate = 60
 export const metadata: Metadata = {
@@ -84,6 +85,8 @@ export default async function ContactPage() {
           <ContactForm verticals={verticals} />
         </Reveal>
       </div>
+
+      {settings.toggles.showPaymentDetails && <PaymentDetails settings={settings} />}
     </div>
   )
 }

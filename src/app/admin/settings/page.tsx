@@ -131,6 +131,24 @@ function SettingsPage() {
         <Field label="Google Maps Embed URL"><Input value={settings.mapsEmbedUrl} onChange={e => set('mapsEmbedUrl', e.target.value)} /></Field>
       </Card>
 
+      <Card title="Payment Details — shown on the Contact page">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
+          <Field label="Account Name"><Input value={settings.bankAccountName} onChange={e => set('bankAccountName', e.target.value)} /></Field>
+          <Field label="Account Number"><Input value={settings.bankAccountNumber} onChange={e => set('bankAccountNumber', e.target.value)} /></Field>
+          <Field label="IFSC Code"><Input value={settings.bankIfsc} onChange={e => set('bankIfsc', e.target.value)} placeholder="SBIN0021164" /></Field>
+          <Field label="Bank Name"><Input value={settings.bankName} onChange={e => set('bankName', e.target.value)} /></Field>
+        </div>
+        <Field label="Branch"><Input value={settings.bankBranch} onChange={e => set('bankBranch', e.target.value)} /></Field>
+        <Field label="UPI ID"><Input value={settings.upiId} onChange={e => set('upiId', e.target.value)} placeholder="name@bank" /></Field>
+        <Field label="UPI QR Image URL — replace the file at /public/images/qrcode.jpeg, or paste an uploaded image URL">
+          <Input value={settings.upiQrUrl} onChange={e => set('upiQrUrl', e.target.value)} placeholder="/images/qrcode.jpeg" />
+        </Field>
+        <p className="text-[11px] text-muted leading-relaxed">
+          Leave the account number and IFSC blank to hide the bank card; leave the UPI ID and QR blank to hide the scan card.
+          Hide the whole section from Banners &amp; Display.
+        </p>
+      </Card>
+
       <Card title="Social Links">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-x-4">
           <Field label="Instagram URL"><Input value={settings.instagram} onChange={e => set('instagram', e.target.value)} /></Field>

@@ -18,12 +18,20 @@ const DEFAULT_SETTINGS: SiteSettings = {
   toggles: {
     showBrandCards: true, showSlideshow: true, showVideos: true,
     showGallery: true, showReviews: true, showWhatsappFloat: true, showWhyChooseUs: true,
+    showPaymentDetails: true,
   },
   servicesStrip: [],
   whyChooseUs: [],
   values: [],
   aboutIntroTitle: '', aboutIntroText1: '', aboutIntroText2: '', taglineband: '',
   logoUrl: '', logoMediaId: null,
+  bankAccountName: 'BR HOSPITALITY GROUP',
+  bankAccountNumber: '45169935937',
+  bankIfsc: 'SBIN0021164',
+  bankName: 'State Bank of India',
+  bankBranch: 'Champapet, Sagar Road, Hyderabad 500079',
+  upiId: 'SBIBHIM.INSTANT52418703316752021@sbipay',
+  upiQrUrl: '/images/qrcode.jpeg',
   amenitiesMaster: [
     '🍽️ Multi-cuisine Menu', '🏛️ Banquet Hall', '🎤 Live Events', '🅿️ Valet Parking', '❄️ AC Halls',
     '🎂 Custom Cakes', '🍷 Bar & Lounge', '📸 Photo Zone', '🌿 Open Dining', '🎨 Décor Team',
@@ -50,7 +58,17 @@ export async function getSiteSettings(): Promise<SiteSettings> {
   try {
     const doc = await adminDb().collection('settings').doc('site').get()
     if (!doc.exists) return DEFAULT_SETTINGS
-    return { ...DEFAULT_SETTINGS, ...doc.data() } as SiteSettings
+    const data = doc.data() || {}
+    // Spreading is shallow, so a stored nested object would wholly replace its default —
+    // meaning any newly added toggle/stat reads back undefined until someone re-saves in
+    // admin. Merge the nested groups explicitly so new keys inherit their default.
+    return {
+      ...DEFAULT_SETTINGS,
+      ...data,
+      toggles:    { ...DEFAULT_SETTINGS.toggles,    ...(data.toggles    || {}) },
+      homeStats:  { ...DEFAULT_SETTINGS.homeStats,  ...(data.homeStats  || {}) },
+      aboutStats: { ...DEFAULT_SETTINGS.aboutStats, ...(data.aboutStats || {}) },
+    } as SiteSettings
   } catch {
     return DEFAULT_SETTINGS
   }
