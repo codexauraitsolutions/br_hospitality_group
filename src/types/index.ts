@@ -134,6 +134,7 @@ export interface SiteToggles {
   showWhatsappFloat:   boolean
   showWhyChooseUs:     boolean
   showPaymentDetails:  boolean
+  showBrochure:        boolean
 }
 
 export interface IconCard {

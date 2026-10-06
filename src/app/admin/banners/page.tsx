@@ -17,6 +17,7 @@ const TOGGLE_LABELS: Record<keyof SiteToggles, string> = {
   showWhatsappFloat: 'Floating Contact Bar (Call / WhatsApp / Enquire / Location)',
   showWhyChooseUs: 'Show Why Choose Us Section',
   showPaymentDetails: 'Bank & UPI Payment Details (Contact page)',
+  showBrochure: 'Pamphlet / Brochure Section (Homepage)',
 }
 
 export default function BannersPageGuarded() {

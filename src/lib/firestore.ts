@@ -18,7 +18,7 @@ const DEFAULT_SETTINGS: SiteSettings = {
   toggles: {
     showBrandCards: true, showSlideshow: true, showVideos: true,
     showGallery: true, showReviews: true, showWhatsappFloat: true, showWhyChooseUs: true,
-    showPaymentDetails: true,
+    showPaymentDetails: true, showBrochure: true,
   },
   servicesStrip: [],
   whyChooseUs: [],

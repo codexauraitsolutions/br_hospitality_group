@@ -5,6 +5,7 @@ import ServicesStrip from '@/components/sections/ServicesStrip'
 import IconCardGrid from '@/components/sections/IconCardGrid'
 import StatsBand from '@/components/sections/StatsBand'
 import TestimonialsGrid from '@/components/sections/TestimonialsGrid'
+import BrochureSection from '@/components/sections/BrochureSection'
 import Reveal from '@/components/motion/Reveal'
 
 export const revalidate = 60
@@ -45,6 +46,7 @@ export default async function HomePage() {
       {settings.toggles.showWhyChooseUs && (
         <IconCardGrid eyebrow="Why Choose Us" title={<>Why Families &amp; Corporates <strong className="italic font-normal">Choose Us</strong></>} items={settings.whyChooseUs} />
       )}
+      {settings.toggles.showBrochure && <BrochureSection />}
       <StatsBand stats={stats} />
       {settings.toggles.showReviews && <TestimonialsGrid testimonials={testimonials} />}
       {settings.taglineband && (
