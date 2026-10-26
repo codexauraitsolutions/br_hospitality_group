@@ -43,6 +43,11 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
   const { media, staff } = result
 
   await deleteFromS3(media.s3Key)
+  // Video posters are separate S3 objects with no media record of their own, so they'd
+  // be orphaned in the bucket if the cascade didn't remove them here.
+  if (media.posterS3Key) {
+    try { await deleteFromS3(media.posterS3Key) } catch { /* poster already gone */ }
+  }
   await adminDb().collection('media').doc(params.id).delete()
   await logActivity(`Deleted media "${media.filename}" (removed from S3)`, 'delete', staff!.email, media.verticalSlug)
 

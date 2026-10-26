@@ -57,7 +57,7 @@ export default function Lightbox({ items, index, onClose, onNav }: {
               // eslint-disable-next-line @next/next/no-img-element
               <img src={item.url} alt={item.caption || item.filename} className="max-w-full max-h-[85vh] object-contain rounded-md" />
             ) : (
-              <video src={item.url} controls autoPlay className="max-w-full max-h-[85vh] rounded-md" />
+              <video src={item.url} poster={item.posterUrl || undefined} controls autoPlay playsInline className="max-w-full max-h-[85vh] rounded-md" />
             )}
             {item.caption && <div className="text-white/70 text-center text-sm mt-3">{item.caption}</div>}
           </motion.div>

@@ -7,6 +7,10 @@
 // rogue iframes/clickjacking, and injected forms/objects. React also auto-escapes all
 // rendered content, so inline-script injection risk here is low.
 //
+// media-src must be listed separately: without it, <video>/<audio> fall back to
+// default-src 'self' and every S3-hosted venue video is blocked, even though img-src
+// already allows the same bucket for photos.
+//
 // connect-src carries analytics.google.com because GA4 sends a second measurement hit there
 // alongside google-analytics.com. The ad/remarketing endpoints gtag also reaches for
 // (stats.g.doubleclick.net, google.<tld>/ads/ga-audiences) are deliberately left blocked —
@@ -24,6 +28,7 @@ const csp = `
   script-src 'self' 'unsafe-inline' ${isDev ? "'unsafe-eval' " : ''}https://www.googletagmanager.com;
   style-src 'self' 'unsafe-inline';
   img-src 'self' data: blob: https://*.amazonaws.com;
+  media-src 'self' blob: https://*.amazonaws.com;
   font-src 'self' data:;
   connect-src 'self' https://*.googleapis.com https://*.amazonaws.com https://www.google-analytics.com https://*.google-analytics.com https://analytics.google.com https://www.googletagmanager.com;
   frame-src https://www.google.com;

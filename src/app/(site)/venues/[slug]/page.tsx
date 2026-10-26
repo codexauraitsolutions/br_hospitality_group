@@ -1,6 +1,7 @@
 import { notFound, redirect } from 'next/navigation'
 import { getVerticalBySlug, getMedia, getActiveTestimonials } from '@/lib/firestore'
 import BookingForm from '@/components/sections/BookingForm'
+import VenueVideo from '@/components/sections/VenueVideo'
 import VenueHero from '@/components/sections/VenueHero'
 import VenueGallery from '@/components/sections/VenueGallery'
 import { Stagger, StaggerItem } from '@/components/motion/Reveal'
@@ -80,9 +81,9 @@ export default async function VerticalDetailPage({ params }: { params: { slug: s
           {videos.length > 0 && (
             <div className="mb-8">
               <div className="text-[.65rem] font-bold uppercase tracking-[.16em] text-muted mb-2.5">Videos</div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {videos.map(v => (
-                  <video key={v.id} src={v.url} controls className="w-full rounded-md aspect-video object-cover" />
+                  <VenueVideo key={v.id} src={v.url} poster={v.posterUrl} width={v.width} height={v.height} />
                 ))}
               </div>
             </div>

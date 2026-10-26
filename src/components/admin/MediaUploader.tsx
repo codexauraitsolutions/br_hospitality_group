@@ -4,6 +4,7 @@ import { useDropzone } from 'react-dropzone'
 import toast from 'react-hot-toast'
 import { authedJson } from '@/lib/apiClient'
 import { MediaSection, MediaItem, VerticalSlug } from '@/types'
+import { getVideoMeta, captureVideoPoster, transcodeVideo } from '@/lib/videoProcessing'
 
 function getImageDimensions(file: File): Promise<{ width?: number; height?: number }> {
   if (!file.type.startsWith('image/')) return Promise.resolve({})
@@ -50,6 +51,7 @@ export default function MediaUploader({ section, verticalSlug, accept = 'image/*
 }) {
   const [uploading, setUploading] = useState(false)
   const [progress, setProgress] = useState({ done: 0, total: 0 })
+  const [stage, setStage] = useState('')
 
   const uploadOne = async (file: File) => {
     const isImage = file.type.startsWith('image/')
@@ -72,6 +74,41 @@ export default function MediaUploader({ section, verticalSlug, accept = 'image/*
       }
     }
 
+    // Phone clips land as 4K portrait at ~10 Mbps — far more than the site ever shows,
+    // and with no poster the tile is a black box until the viewer hits play.
+    let poster: { url: string; key: string } | null = null
+    if (!isImage && file.type.startsWith('video/')) {
+      const meta = await getVideoMeta(file)
+      if (meta) dims = { width: meta.width, height: meta.height }
+
+      setStage('Creating thumbnail…')
+      const shot = await captureVideoPoster(file)
+      if (shot) {
+        const posterName = file.name.replace(/\.[^.]+$/, '') + '-poster.jpg'
+        try {
+          const pre = await authedJson<{ uploadUrl: string; key: string; publicUrl: string }>(
+            '/api/upload/presign',
+            { method: 'POST', body: JSON.stringify({ filename: posterName, contentType: 'image/jpeg', section, verticalSlug }) },
+          )
+          const res = await fetch(pre.uploadUrl, { method: 'PUT', headers: { 'Content-Type': 'image/jpeg' }, body: shot.blob })
+          if (res.ok) poster = { url: pre.publicUrl, key: pre.key }
+        } catch {
+          // A missing thumbnail shouldn't block the video itself from uploading.
+        }
+      }
+
+      // Real-time re-encode, so tell the admin how far along it is rather than freezing.
+      setStage('Compressing video… 0%')
+      const smaller = await transcodeVideo(file, f => setStage(`Compressing video… ${Math.round(f * 100)}%`))
+      if (smaller) {
+        uploadBody = smaller.blob
+        contentType = 'video/mp4'
+        filename = file.name.replace(/\.[^.]+$/, '') + '.mp4'
+        dims = { width: smaller.width, height: smaller.height }
+      }
+      setStage('Uploading…')
+    }
+
     const { uploadUrl, key, publicUrl } = await authedJson<{ uploadUrl: string; key: string; publicUrl: string }>(
       '/api/upload/presign',
       { method: 'POST', body: JSON.stringify({ filename, contentType, section, verticalSlug }) },
@@ -87,12 +124,14 @@ export default function MediaUploader({ section, verticalSlug, accept = 'image/*
       body: JSON.stringify({
         section, verticalSlug, s3Key: key, url: publicUrl, type,
         filename, size: uploadBody.size, ...dims, caption: '',
+        posterUrl: poster?.url, posterS3Key: poster?.key,
       }),
     })
 
     onUploaded({
       id: created.id, section, verticalSlug: verticalSlug || null, s3Key: key, url: publicUrl, type,
       filename, size: uploadBody.size, ...dims, caption: '', sortOrder: 0, active: true,
+      posterUrl: poster?.url ?? null, posterS3Key: poster?.key ?? null,
       createdAt: new Date().toISOString(),
     })
   }
@@ -110,6 +149,7 @@ export default function MediaUploader({ section, verticalSlug, accept = 'image/*
         toast.error(err instanceof Error ? err.message : `Failed to upload ${file.name}`)
       }
       setProgress(p => ({ ...p, done: p.done + 1 }))
+      setStage('')
     }
     setUploading(false)
     if (failed === 0) toast.success(`${files.length} file(s) uploaded`)
@@ -129,7 +169,13 @@ export default function MediaUploader({ section, verticalSlug, accept = 'image/*
       } ${uploading ? 'opacity-60 pointer-events-none' : ''}`}>
       <input {...getInputProps()} />
       {uploading ? (
-        <div className="text-[13px] text-muted">Uploading {progress.done}/{progress.total}…</div>
+        <div className="text-[13px] text-muted">
+          <div>Uploading {progress.done}/{progress.total}…</div>
+          {stage && <div className="text-[11px] mt-1 text-gold">{stage}</div>}
+          {stage.startsWith('Compressing') && (
+            <div className="text-[10px] mt-1 opacity-70">Large videos are resized here — keep this tab open.</div>
+          )}
+        </div>
       ) : (
         <>
           <div className="text-2xl mb-1.5">⬆️</div>

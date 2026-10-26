@@ -33,9 +33,11 @@ export async function GET(req: NextRequest) {
 // has already PUT the file to S3 using a presigned URL from /api/upload/presign.
 export async function POST(req: NextRequest) {
   const body = await req.json()
-  const { section, verticalSlug, s3Key, url, type, filename, size, width, height, caption } = body as {
+  const { section, verticalSlug, s3Key, url, type, filename, size, width, height, caption,
+          posterUrl, posterS3Key } = body as {
     section: MediaSection; verticalSlug?: VerticalSlug; s3Key: string; url: string; type: 'image' | 'video'
     filename: string; size: number; width?: number; height?: number; caption?: string
+    posterUrl?: string; posterS3Key?: string
   }
 
   if (!section || !s3Key || !url || !type || !filename) {
@@ -52,6 +54,7 @@ export async function POST(req: NextRequest) {
   const ref = await adminDb().collection('media').add({
     section, verticalSlug: verticalSlug || null, s3Key, url, type, filename,
     size: size || 0, width: width || null, height: height || null,
+    posterUrl: posterUrl || null, posterS3Key: posterS3Key || null,
     caption: caption || '', sortOrder: siblingCount, active: true,
     createdAt: new Date().toISOString(),
   })

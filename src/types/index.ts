@@ -51,6 +51,8 @@ export interface MediaItem {
   sortOrder:     number
   active:        boolean
   createdAt:     string
+  posterUrl?:    string | null
+  posterS3Key?:  string | null
 }
 
 export type BookingStatus = 'new' | 'confirmed' | 'completed' | 'cancelled'
